@@ -6,5 +6,6 @@
 <body>
 	<jsp:include page='<%="/servlet/NewsServlet?type1=homepageTypes"%>'
 		flush="true" />
+		<!-- 此处代码为练习一测试GitHub同步文件问题小组成员B-xp修改处  -->
 </body>
 </html>
