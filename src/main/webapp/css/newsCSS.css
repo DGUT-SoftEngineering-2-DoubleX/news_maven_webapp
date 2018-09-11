@@ -1,0 +1,340 @@
+@charset "utf-8";
+
+* { /* 清除不同浏览器的不同外边距 */
+	margin: 0;
+	padding: 0;
+}
+/* 除去浮动*/
+.clear {
+	clear: both;
+}
+/* 水平居中 */
+.center {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.tableDefault {
+	border: 1px solid #F5EDFB;
+	padding: 0px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 5px;
+	border-collapse: collapse;
+}
+
+td {
+	margin: 0;
+	padding: 2px;
+}
+
+.trDefault {
+	border: 1px solid #F5EDFB;
+}
+
+tr:nth-child(odd) {
+	background-color: #FBF9FD;
+}
+
+/*tr:nth-child(n+1):nth-child(-n+100):hover {
+	background-color: #c0c0c0;
+}*/
+
+/*取消超链接的下划线*/
+a:link {
+	text-decoration: none;
+}
+
+a:visited {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+a:active {
+	text-decoration: none;
+}
+
+.model {
+	height: 100%;
+	width: 100%;
+	position: fixed;
+	background-color: #f2f2f2;
+	top: 0px;
+	left: 0px;
+	display: none;
+}
+
+.modelContent {
+	width: 400px;
+	margin-right: auto;
+	margin-left: auto;
+	margin-top: 40px;
+}
+
+.div-out {
+	margin-right: auto;
+	margin-left: auto;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	width: 800px;
+	height: auto;
+}
+
+.news {
+	width: 800px;
+	margin-right: auto;
+	margin-left: auto;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.newsleft {
+	float: left;
+	height: 230px;
+	width: 395px;
+	margin-right: 10px;
+	margin-bottom: 10px;
+}
+
+.newsRight {
+	float: left;
+	height: 230px;
+	width: 395px;
+	margin-right: 0px;
+	margin-bottom: 10px;
+	margin-left: 0px;
+}
+
+.mainPageUl {
+	background-image: url(/news/images/item.png);
+	background-position: 0px 6px;
+	padding-left: 8px;
+	background-repeat: no-repeat;
+}
+
+.invisibleTable {
+	border: none;
+	width: 100%;
+}
+
+.newsColumn {
+	background: url(/news/images/bg1px.png) 0 -33px repeat-x;
+	line-height: 34px;
+	height: 34px;
+}
+
+.newsShowByType_frame {
+	width: 800px;
+	position: relative;
+	left: 0;
+	right: 0;
+}
+
+.newsShowByType_left {
+	width: 138px;
+	height: 450px;
+	border: 1px solid #333333;
+	margin-right: 2px;
+	margin-top: 2px;
+	position: absolute;
+	padding-left: 40px;
+	line-height: 30px;
+	padding-top: 30px;
+}
+
+.newsShowByType_rightTop {
+	width: 524px;
+	height: 370px;
+	margin-top: 2px;
+	border-right: 1px solid #333333;
+	border-top: 1px solid #333333;
+	border-bottom: 0px;
+	border-left: 1px solid #333333;
+	position: absolute;
+	left: 205px;
+	padding-left: 40px;
+	padding-right: 30px;
+	line-height: 30px;
+	padding-top: 30px;
+}
+
+.newsShowByType_rightBottom {
+	width: 524px;
+	height: 50px;
+	border-right: 1px solid #333333;
+	border-top: 0px;
+	border-bottom: 1px solid #333333;
+	border-left: 1px solid #333333;
+	position: absolute;
+	left: 205px;
+	top: 403px;
+	padding-left: 40px;
+	padding-right: 30px;
+	line-height: 30px;
+	padding-top: 30px;
+}
+
+.newsShowByType_news_ul {
+	list-style-image: url(/news/images/item.png);
+	list-style-position: inside;
+}
+
+.newsCaption {
+	font-family: "黑体";
+	font-size: 24px;
+	height: 50px;
+	text-align: center;
+}
+
+.commentsHead {
+	padding-bottom: 10px;
+	font-size: 16px;
+	font-family: 'Microsoft YaHei', Hei, arial, sans-serif;
+	width: 600px;
+}
+
+.commentIcon {
+	width: 38px;
+	height: 38px;
+	float: left;
+}
+
+.comment1 {
+	float: left;
+	padding-left: 14px;
+}
+
+.commentAuthor {
+	font-size: 14px;
+	color: #00bc3e;
+}
+
+.commentTime {
+	font-size: 14px;
+	color: #bbb;
+	margin-top: 4px;
+}
+
+.comment2 {
+	float: right;
+	font-size: 14px;
+	height: 100%;
+}
+
+.comment4 {
+	float: right;
+}
+
+.reviseComment {
+	font-size: 12px;
+	width: 34px;
+	height: 14px;
+	color: #333;
+	margin-right: 10px;
+	cursor: pointer;
+}
+
+.commentPraiseA {
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	background: url(http://p3.qhimg.com/t01539eaa3e45dc968b.png) no-repeat;
+	cursor: pointer;
+	opacity: 0.4;
+}
+
+.commentPraiseText {
+	margin-left: .46154em;
+}
+
+.comment3 {
+	float: right;
+	padding-left: 10px;
+	color: #bbb;
+	height: 100%;
+}
+
+.commentReplay {
+	font-size: 12px;
+	width: 34px;
+	height: 14px;
+	color: #ccc;
+	margin-right: 10px;
+	cursor: pointer;
+}
+
+.commentContent {
+	font-size: 14px;
+	line-height: 24px;
+	color: #333;
+	padding-right: 14px;
+	word-wrap: break-word;
+}
+
+.comment5 {
+	padding-top: 4px;
+	padding-left: 52px;
+	padding-bottom: 10px;
+	border-bottom: 1px solid #eee;
+}
+
+.tail {
+	width: 800px;
+	text-align: center;
+	font-size: 12px;
+	line-height: 20px;
+	margin-top: 15px
+}
+
+.manageMain_right {
+	width: 524px;
+	height: 450px;
+	margin-top: 2px;
+	border: 1px solid #333333;
+	position: absolute;
+	left: 205px;
+	padding-left: 20px;
+	padding-right: 20px;
+	line-height: 30px;
+	padding-top: 30px;
+}
+
+.logleft {
+	width: 290px;
+	padding: 0px;
+	margin: 0px;
+	float: left;
+}
+
+.logMiddle {
+	height: 80px;
+	width: 250px;
+	margin: 0px;
+	float: left;
+	position: relative;
+}
+
+.logMiddleInner {
+	position: absolute;
+	bottom: 0px;
+	padding: 0px;
+	margin: 0px;
+}
+
+.logRight {
+	height: 80px;
+	width: 260px;
+	margin: 0px;
+	float: left;
+	position: relative;
+}
+
+.logRightInner {
+	position: absolute;
+	bottom: 0px;
+	padding: 0px;
+	margin: 0px;
+}
