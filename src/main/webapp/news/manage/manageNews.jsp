@@ -6,9 +6,7 @@
 <head>
 <meta charset="utf-8">
 <link href="/news/css/newsCSS.css" rel="stylesheet" type="text/css">
-<script type="text/javascript" src="/news/js/jquery/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
-	/*
 	function deleteANews(id) {
 		ids1 = document.getElementById("ids");
 		ids1.value = id;
@@ -54,53 +52,6 @@
 		document.getElementById('myform').setAttribute("target", "_self");
 		document.getElementById('myform').action = "/news/servlet/NewsServlet?type1=manageNews";
 		document.getElementById('myform').submit();
-	}
-	*/
-	function deleteANews(id) {
-		ids1 = $("#ids");
-		ids1.val(id);
-		//提交
-		$("#myform").attr("target", "frame");
-		$("#myform").attr("action", "/news/servlet/NewsServlet?type1=deleteANews");
-		$("#myform").submit();
-	}
-
-	function editsANew(id) {
-		ids1 = $("#ids");
-		ids1.val(id);
-		//提交
-		$("#myform").attr("target", "_blank");
-		$("#myform").attr("action", "/news/servlet/NewsServlet?type1=editANews");
-		$("#myform").submit();
-	}
-
-	function getOnePage(type) {
-		var url1;
-		var page = $("#page");
-		var pageSize = $("#pageSize");
-		var totalPageCount = $("#totalPageCount");
-
-		var order = $("#order");
-		var orderField = $("#orderField");
-
-		pageValue = parseInt(page.val());
-		if (type == "first")
-			page.val("1");
-		else if (type == "pre") {
-			pageValue -= 1;
-			page.val(pageValue.toString());
-		} else if (type == "next") {
-			pageValue += 1;
-			page.val(pageValue.toString());
-		} else if (type == "last") {
-			page.val(totalPageCount.val());
-		}
-		//提交
-		ids1 = $("#ids");
-		ids1.value = "";
-		$("#myform").attr("target", "_self");
-		$("#myform").attr("action", "/news/servlet/NewsServlet?type1=manageNews");
-		$("#myform").submit();
 	}
 </script>
 </head>

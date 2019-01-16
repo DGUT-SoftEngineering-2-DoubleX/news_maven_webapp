@@ -7,9 +7,8 @@
 <head>
 <meta charset="utf-8">
 <link href="/news/css/newsCSS.css" rel="stylesheet" type="text/css">
-<script type="text/javascript" src="/news/js/jquery/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
-	/*
+
 	function getOnePage(type) {
 		var pages = document.getElementsByClassName("page");
 		var page = pages[0];
@@ -78,89 +77,6 @@
 		document.getElementById('myModel').innerHTML = "";
 		document.getElementById('myModel').style.display = "none";
 	}
-	*/
-	function getOnePage(type) {
-		var page = $("input[name='page']");
-		var pageValue = parseInt(page.val());
-		if (type == "pre") {
-			pageValue -= 1;
-			page.val(pageValue.toString());
-		} else if (type == "next") {
-			pageValue += 1;
-			page.val(pageValue.toString());
-		}
-		//提交
-		$("#myform").submit();
-	}
-
-	function praise(commentId, newsId) {
-		$("#myform").attr("action", "/news/servlet/CommentServlet?type=praise&"
-			+ "&commentId=" + commentId + "&newsId=" + newsId);
-		$("#myform").submit();
-	}
-
-	function reviseComment(commentId) {
-		$("#myModel").html("<form action='/news/servlet/CommentServlet?type=reviseCommnet&' method='post'>" +
-			"<div class='modelContent'>" +
-			"<h2>修改评论页面</h2>" +
-			"<table><tbody><tr><td colspan='2'>" +
-			"<textarea name='content' cols='60' rows='8' id='textarea' style='resize: none;' required></textarea></td>" +
-			"</tr><tr>" +
-			"<td align='center'><input type='submit' name='submit' id='submit' value='提交评论'></td>" +
-			"<td align='center'><input type='submit' onclick='cancel();' value='取消'></td>" +
-			"</tr></tbody></table>" +
-			"</div>" +
-			"<input type='hidden' name='newsId' id='newsId' value='${param.newsId}'>" +
-			"<input type='hidden' name='page' id='page' value='${param.page}'>" +
-			"<input type='hidden' name='pageSize' id='pageSize' value='${param.pageSize}'>" +
-			"<input type='hidden' name='totalPageCount' id='totalPageCount' value='${param.totalPageCount}'>" +
-			"<input type='hidden' name='commentId' id='commentId'>" +
-			"</form>");
-		$("#myModel").html("<form action='/news/servlet/CommentServlet?type=reviseCommnet&' method='post'>" +
-			"<div class='modelContent'>" +
-			"<h2>修改评论页面</h2>" +
-			"<table><tbody><tr><td colspan='2'>" +
-			"<textarea name='content' cols='60' rows='8' id='textarea' style='resize: none;' required></textarea></td>" +
-			"</tr><tr>" +
-			"<td align='center'><input type='submit' name='submit' id='submit' value='提交评论'></td>" +
-			"<td align='center'><input type='submit' onclick='cancel();' value='取消'></td>" +
-			"</tr></tbody></table>" +
-			"</div>" +
-			"<input type='hidden' name='newsId' id='newsId' value='${param.newsId}'>" +
-			"<input type='hidden' name='page' id='page' value='${param.page}'>" +
-			"<input type='hidden' name='pageSize' id='pageSize' value='${param.pageSize}'>" +
-			"<input type='hidden' name='totalPageCount' id='totalPageCount' value='${param.totalPageCount}'>" +
-			"<input type='hidden' name='commentId' id='commentId'>" +
-			"</form>");
-		$("#commentId").val(commentId);
-		$("#myModel").css("display", "block");
-	}
-
-	function model(commentId) {
-		$("#myModel").html("<form action='/news/servlet/CommentServlet?type=addCommnet' method='post'>" +
-			"<div class='modelContent'>" +
-			"<h2>评论页面</h2>" +
-			"<table><tbody><tr><td colspan='2'>" +
-			"<textarea name='content' cols='60' rows='8' id='textarea' required></textarea></td>" +
-			"</tr><tr>" +
-			"<td align='center'><input type='submit' name='submit' id='submit' value='提交评论'></td>" +
-			"<td align='center'><input type='submit' onclick='cancel();' value='取消'></td>" +
-			"</tr></tbody></table>" +
-			"</div>" +
-			"<input type='hidden' name='newsId' id='newsId' value='${param.newsId}'>" +
-			"<input type='hidden' name='page' id='page' value='${param.page}'>" +
-			"<input type='hidden' name='pageSize' id='pageSize' value='${param.pageSize}'>" +
-			"<input type='hidden' name='totalPageCount' id='totalPageCount' value='${param.totalPageCount}'>" +
-			"<input type='hidden' name='commentId' id='commentId'>" +
-			"</form>");
-		$("#commentId").val(commentId);
-		$("#myModel").css("display", "block");
-	}
-
-	function cancel() {
-		$("#myModel").html("");
-		$("#myModel").css("display", "none");
-	}
 </script>
 </head>
 
@@ -201,7 +117,7 @@
 
 								<%
 									long nowTime = new Date().getTime();
-											request.setAttribute("nowTime", nowTime);
+									request.setAttribute("nowTime", nowTime);
 								%>
 								<c:if
 									test="${nowTime-commentUserView.time.getTime()<(1000*60*5) && commentUserView.userId==sessionScope.user.userId }">

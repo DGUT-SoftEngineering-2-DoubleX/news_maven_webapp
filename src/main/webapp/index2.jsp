@@ -37,23 +37,14 @@
 
 								<tr onmouseover="this.style.backgroundColor='#c0c0c0'"
 									onmouseout="this.style.backgroundColor='#FBF9FD'">
-									<td class="mainPageUl"><c:if
-											test="${sessionScope.user.type != 'manager' && news.url != ''}">
-											<a href="${news.url}" title="${news.caption}" target="_blank">
-										</c:if> <c:if
-											test="${news.url == '' || sessionScope.user.type == 'manager'}">
-											<a
-												href="/news/servlet/NewsServlet?type1=showANews&newsId=${news.newsId}&page=1&pageSize=2"
-												title="${news.caption}" target="_blank">
-										</c:if> <!--
-											 <a href="${news.url}" title="${news.caption}" target="_blank">
-											 <a
+									<td class="mainPageUl"><a
 										href="/news/servlet/NewsServlet?type1=showANews&newsId=${news.newsId}&page=1&pageSize=2"
-										title="${news.caption}" target="_blank"> -->
-										<div
-											style="width:260px;heigth:36px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">
-											${requestScope.newsCaptionsList[newsTypeStatus.index].get(status.index)}
-										</div> </a></td>
+										title="${news.caption}" target="blank">
+											<div
+												style="width:260px;heigth:36px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">
+												${requestScope.newsCaptionsList[newsTypeStatus.index].get(status.index)}
+											</div>
+									</a></td>
 									<td align="right" width="130" style="font-size:14px;"><myTag:LocalDateTimeTag
 											dateTime="${news.newsTime}" type="YMD" /></td>
 								</tr>

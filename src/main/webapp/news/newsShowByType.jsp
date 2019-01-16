@@ -5,9 +5,7 @@
 <head>
 <link href="/news/css/newsCSS.css" rel="stylesheet" type="text/css">
 <meta charset="utf-8">
-<script type="text/javascript" src="/news/js/jquery/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
-	/*
 	function getOnePage(type) {
 		var url1;
 		var page = document.getElementById("page");
@@ -24,24 +22,6 @@
 		}
 		//提交
 		document.getElementById('myform').submit();
-	}
-	*/
-	function getOnePage(type) {
-		var url1;
-		var page = $("#page");
-		var pageSize = $("#pageSize");
-		var totalPageCount = $("#totalPageCount");
-
-		pageValue = parseInt(page.val());
-		if (type == "pre") {
-			pageValue -= 1;
-			page.val(pageValue.toString());
-		} else if (type == "next") {
-			pageValue += 1;
-			page.val(pageValue.toString());
-		}
-		//提交
-		$("#myform").submit();
 	}
 </script>
 </head>

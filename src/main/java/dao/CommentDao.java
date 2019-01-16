@@ -1,18 +1,13 @@
 package dao;
 
-import static org.hamcrest.CoreMatchers.nullValue;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import tools.PageInformation;
 import tools.Tool;
-import bean.ArticleNumberByMonthInAYear;
 import bean.Comment;
-import bean.CommentNumberTopTenInAYear;
 import bean.CommentUserView;
-import bean.Statistics;
 
 public class CommentDao {
 
@@ -113,62 +108,4 @@ public class CommentDao {
 			databaseDao.update(sqlFollow);
 		return result;
 	}
-
-	public CommentNumberTopTenInAYear commentNumberByMonthInAYear(String year) throws SQLException, Exception {
-		CommentNumberTopTenInAYear commentNumberTopTenInAYear = new CommentNumberTopTenInAYear();
-		commentNumberTopTenInAYear.setYear(Integer.parseInt(year));
-		String sql = "SELECT name as userName, count(*) as commentNumber from user,comment where user.userId=comment.userId and YEAR(time)='"
-				+ year + "' GROUP BY user.userId ORDER BY count(*) LIMIT 10";
-		DatabaseDao databaseDao = new DatabaseDao();
-		databaseDao.query(sql);
-		while (databaseDao.next()) {
-			Statistics statistics = new Statistics();
-			statistics.setName(databaseDao.getString("userName"));
-			statistics.setCount(databaseDao.getInt("commentNumber"));
-			commentNumberTopTenInAYear.getCommentList().add(statistics);
-		}
-
-		return commentNumberTopTenInAYear;
-	}
-
-	public List<CommentNumberTopTenInAYear> commentNumberTopTenInAYearEveryYear() throws SQLException, Exception {
-		List<CommentNumberTopTenInAYear> commentNumberTopTenInAYears = new ArrayList<CommentNumberTopTenInAYear>();
-		String sql = "SELECT YEAR(time) as year, name as userName, count(*) as commentNumber FROM user,comment where user.userId=comment.userId and YEAR(time) in (SELECT YEAR(time) FROM comment GROUP BY YEAR(time)) GROUP BY YEAR(time),user.userId ORDER BY YEAR(time),count(*) DESC LIMIT 10";
-		DatabaseDao databaseDao = new DatabaseDao();
-		databaseDao.query(sql);
-		Integer nowYear = 0;
-		CommentNumberTopTenInAYear commentNumberTopTenInAYear = null;
-		while (databaseDao.next()) {
-			Integer nowDatabaseYear = databaseDao.getInt("year");
-
-			if (!nowYear.equals(nowDatabaseYear)) {// 新的一年
-													// //注意：Integer相等必须用equals方法进行比较,不能直接用==比较是否相等
-				nowYear = nowDatabaseYear;
-				if (commentNumberTopTenInAYear != null)
-					commentNumberTopTenInAYears.add(commentNumberTopTenInAYear);// 将旧的一年的数据加入数组
-				// 新的一年的数据
-				commentNumberTopTenInAYear = new CommentNumberTopTenInAYear();
-				commentNumberTopTenInAYear.setYear(nowYear);
-			}
-
-			// 加入该月的数据
-			// commentNumberTopTenInAYear.getCommentList().set(new
-			// Statistics().getInt("month1") - 1,
-			// databaseDao.getInt("articleNumber"));
-			// articleNumberByMonthInAYear.setTotalNewsNumber(
-			// articleNumberByMonthInAYear.getTotalNewsNumber() +
-			// databaseDao.getInt("articleNumber"));
-
-			Statistics statistics = new Statistics();
-			statistics.setName(databaseDao.getString("userName"));
-			statistics.setCount(databaseDao.getInt("commentNumber"));
-			commentNumberTopTenInAYear.getCommentList().add(statistics);
-
-		}
-		if (commentNumberTopTenInAYear != null)
-			commentNumberTopTenInAYears.add(commentNumberTopTenInAYear);// 将最后一年的数据加入数组
-
-		return commentNumberTopTenInAYears;
-	}
-
 }

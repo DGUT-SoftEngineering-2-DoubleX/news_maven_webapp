@@ -6,5 +6,5 @@
 <body>
 	<jsp:include page='<%="/servlet/NewsServlet?type1=homepageTypes"%>'
 		flush="true" />
-</body>
+	</body>
 </html>

@@ -12,24 +12,6 @@ public class News {
 	private LocalDateTime newsTime;
 	private Timestamp publishTime;
 	private Integer publisherId;
-	private String url;
-	private Integer staticHtml;
-
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
-	}
-
-	public Integer getStaticHtml() {
-		return staticHtml;
-	}
-
-	public void setStaticHtml(Integer staticHtml) {
-		this.staticHtml = staticHtml;
-	}
 
 	public Integer getPublisherId() {
 		return publisherId;

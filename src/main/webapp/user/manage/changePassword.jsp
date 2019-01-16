@@ -3,9 +3,8 @@
 <html>
 <head>
 <meta charset="utf-8">
-<script type="text/javascript" src="/news/js/jquery/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
-	/*
+
 	function valPassword(input, span) {
 		var inputValue = document.getElementById(input).value;
 		var spanObj = document.getElementById(span);
@@ -57,63 +56,12 @@
 			return false;
 		}
 	}
-	*/
-	function valPassword(input, span) {
-		var inputValue = $('#' + input).val();
-		var spanObj = $('#' + span);
-		var pattern = /^(\w){6,20}$/;
 
-		if (inputValue == null || inputValue == "") {
-			$('#' + span).html("*不能为空");
-			return false;
-		} else if (inputValue.match(pattern) == null) {
-			$('#' + span).html("*密码只能输入6-20个字母、数字、下划线");
-			return false;
-		} else {
-			$('#' + span).html("");
-			return true;
-		}
-	}
-	//检查新旧密码是否不一样，不一样返回true
-	function passwordDifferent(input1, input2, span2) {
-		var input1Value = $('#' + input1).val();
-		var input2Value = $('#' + input2).val();
-		var span2Obj = $('#' + span2);
-
-		if (input2Value == null || input2Value == "") {
-			$('#' + span2).html("*不能为空");
-			return false;
-		} else if (input1Value == input2Value) {
-			$('#' + span2).html("*新旧密码不能相同！");
-			return false;
-		} else {
-			$('#' + span2).html("");
-			return true;
-		}
-	}
-
-	//密码应该一样，一样返回true
-	function passwordSame(input1, input2, span2) {
-		var input1Value = $('#' + input1).val();
-		var input2Value = $('#' + input2).val();
-		var span2Obj = $('#' + span2);
-
-		if (input2Value == null || input2Value == "") {
-			$('#' + span2).html("*不能为空");
-			return false;
-		} else if (input1Value == input2Value) {
-			$('#' + span2).html("");
-			return true;
-		} else {
-			$('#' + span2).html("*两次密码不一样");
-			return false;
-		}
-	}
 	function submit1() {
 		result1 = valPassword("oldPassword", "oldPasswordSpan");
-		result1 = valPassword("newPassword", "newPasswordSpan") & result1;
-		result1 = passwordDifferent("oldPassword", "newPassword", "newPasswordSpan") & result1;
-		result1 = passwordSame("newPassword", "newPassword1", "newPasswordSpan1") & result1;
+		result1 = valPassword("newPassword", "newPasswordSpan") && result1;
+		result1 = passwordDifferent("oldPassword", "newPassword", "newPasswordSpan") && result1;
+		result1 = passwordSame("newPassword", "newPassword1", "newPasswordSpan1") && result1;
 		if (result1)
 			return true; //提交
 		else
@@ -138,21 +86,22 @@
 					<td align="left"><input type="password" name="oldPassword"
 						id="oldPassword"
 						onBlur="valPassword('oldPassword', 'oldPasswordSpan');"> <br>
-						<span id="oldPasswordSpan" style="color: #E7060A;"></span></td>
+					<span id="oldPasswordSpan" style="color: #E7060A;"></span></td>
 				</tr>
 				<tr>
 					<td align="right" height="40">新密码：</td>
 					<td align="left"><input type="password" name="newPassword"
 						id="newPassword"
 						onBlur="valPassword('newPassword','newPasswordSpan');"> <br>
-						<span id="newPasswordSpan" style="color: #E7060A;"></span></td>
+					<span id="newPasswordSpan" style="color: #E7060A;"></span></td>
 				</tr>
 				<tr>
 					<td align="right" height="40">再次输入新密码：</td>
 					<td align="left"><input type="password" name="newPassword1"
 						id="newPassword1"
 						onBlur="passwordSame('newPassword','newPassword1','newPasswordSpan1');">
-						<br> <span id="newPasswordSpan1" style="color: #E7060A;"></span></td>
+						<br>
+					<span id="newPasswordSpan1" style="color: #E7060A;"></span></td>
 				</tr>
 				<tr>
 					<td></td>

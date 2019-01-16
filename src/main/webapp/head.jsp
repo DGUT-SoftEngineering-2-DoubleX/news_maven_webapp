@@ -5,19 +5,10 @@
 <head>
 <meta charset="utf-8">
 <link href="/news/css/newsCSS.css" rel="stylesheet" type="text/css">
-<script type="text/javascript" src="/news/js/jquery/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
-/*
-function search() {
-	document.getElementById('searchForm').submit();
-}
-*/
-
-	$(document).ready(function() {
-		$("#searchButton").click(function() {
-			$("#searchForm").submit();
-		});
-	});
+	function search() {
+		document.getElementById('searchForm').submit();
+	}
 </script>
 </head>
 <body>
@@ -28,9 +19,9 @@ function search() {
 			</div>
 			<div class="logMiddle">
 				<div class="logMiddleInner">
-					<input type="text" id="search" placeholder="请输入搜索内容"><img
-						src="/news/images/search.jpg" height="25" width="24"
-						id="searchButton" />
+					<input type="text" id="search" placeholder="请输入搜索内容"> <a
+						href='javascript:void(0);' onclick="search();"> <img
+						src="/news/images/search.jpg" height="25" width="24" /></a>
 				</div>
 			</div>
 			<div class="logRight">

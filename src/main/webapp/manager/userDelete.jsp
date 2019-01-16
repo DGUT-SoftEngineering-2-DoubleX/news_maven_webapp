@@ -6,9 +6,7 @@
 <head>
 <meta charset="utf-8">
 <link href="/news/css/newsCSS.css" rel="stylesheet" type="text/css">
-<script type="text/javascript" src="/news/js/jquery/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
-	/*
 	function checkAll1(obj) {
 		var checkboxs = document.getElementsByName("checkbox1");
 		for (var i = 0; i < checkboxs.length; i++)
@@ -81,79 +79,6 @@
 		//提交
 		document.getElementById('myform').submit();
 	}
-	*/
-	function checkAll1(obj) {
-		var checkboxs = $("input[name='checkbox1']");
-		for (var i = 0; i < checkboxs.length; i++)
-			checkboxs[i].checked = obj.checked;
-	}
-
-	function checkSelectAll(obj) {
-		var checkboxs = $("input[name='checkbox1']");
-		var checkboxAll = $("#checkboxAll");
-		var i = 0;
-		while (i < checkboxs.length && checkboxs[i].checked) {
-			i++;
-		}
-		if (i == checkboxs.length)
-			checkboxAll.prop("checked", true);
-		else
-			checkboxAll.prop("checked", false);
-	}
-
-	function deleteUsers() {
-		var checkboxs = $("input[name='checkbox1']");
-		var ids = "";
-		////拼接id为 ：1,2,
-		for (i = 0; i < checkboxs.length; i++) {
-			if (checkboxs[i].checked == true)
-				ids += checkboxs[i].value + ",";
-		}
-		if (ids.length < 1) {
-			alert("请选择至少一个需删除的元素！");
-			return false; //阻止提交
-		}
-		ids = ids.substring(0, ids.length - 1); //删除最后的逗号
-		ids1 = $("#ids");
-		ids1.val(ids);
-		//提交
-		$("#myform").submit();
-	}
-
-	function getOnePage(type, orderFieldName) {
-		var url1;
-		var page = $("#page");
-		var pageSize = $("#pageSize");
-		var totalPageCount = $("#totalPageCount");
-
-		var order = $("#order");
-		var orderField = $("#orderField");
-
-		if (orderFieldName != "") { //切换排序
-			orderField.val(orderFieldName); //设置排序字段名
-			if (order.val() == "asc") //切换排序
-				order.val("desc");
-			else
-				order.val("asc");
-
-			page.val("1"); //排序后从第一页开始显示					
-		}
-
-		pageValue = parseInt(page.val());
-		if (type == "first")
-			page.val("1");
-		else if (type == "pre") {
-			pageValue -= 1;
-			page.val(pageValue.toString());
-		} else if (type == "next") {
-			pageValue += 1;
-			page.val(pageValue.toString());
-		} else if (type == "last") {
-			page.val(totalPageCount.val());
-		}
-		//提交
-		$("#myform").submit();
-	}
 </script>
 </head>
 
@@ -192,7 +117,7 @@
 		</table>
 		<table align="center" class="tableDefault">
 			<tr>
-				<td width="190"><input type="button" value="  删 除 所 选 项  "
+				<td width="200"><input type="button" value="  删 除 所 选 项  "
 					onclick="deleteUsers();"></td>
 				<c:if test="${requestScope.pageInformation.page > 1}">
 					<td><a href="javascript:void(0);"
