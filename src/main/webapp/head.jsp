@@ -19,7 +19,7 @@
 			</div>
 			<div class="logMiddle">
 				<div class="logMiddleInner">
-					<input type="text" id="search" placeholder="请输入搜索内容"> <a
+					<input type="text" id="search" placeholder="请在此输入搜索内容"> <a
 						href='javascript:void(0);' onclick="search();"> <img
 						src="/news/images/search.jpg" height="25" width="24" /></a>
 				</div>
