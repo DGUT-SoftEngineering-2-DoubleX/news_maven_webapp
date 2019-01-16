@@ -2,6 +2,7 @@ package dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -10,9 +11,14 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+
 import tools.Tool;
 
 public class DatabaseDao {
+	// 数据库连接池
+	static ComboPooledDataSource dataSource = new ComboPooledDataSource("mysql");
+
 	public static String drv = "com.mysql.jdbc.Driver";// 数据库类型
 	public static String url = "jdbc:mysql://localhost:3306/news";// 数据库网址
 	public static String usr = "root";// 用户名
@@ -21,6 +27,7 @@ public class DatabaseDao {
 	Connection connect = null;
 	Statement stmt = null;
 	ResultSet rs = null;
+	PreparedStatement ps = null;
 
 	boolean defaultCommit;
 
@@ -161,4 +168,60 @@ public class DatabaseDao {
 		this.rs = rs;
 	}
 
+	// 根据表名，字段名，查是否有字段值为value的记录
+	public boolean hasStringValue(String table, String fieldName, String value) throws SQLException {// 返回值：true表示有相同值、false表示没有相同值
+		String sql = "select * from " + table + " where " + fieldName + "='" + value + "'";
+		query(sql);
+		while (next()) {
+			return true;
+		}
+		return false;
+	}
+
+	public Integer getMaxId(String tableName) throws SQLException {
+		String sql = "select max(" + tableName + "Id) as id from " + tableName;
+		query(sql);
+		while (next()) {
+			return this.getInt("id");
+		}
+		return -1;
+	}
+
+	/* --------------------2018-12-3 练习6-------------------- */
+	public void setInt(int parameterIndex, int value) throws SQLException {
+		ps.setInt(parameterIndex, value);
+	}
+
+	public void setString(int parameterIndex, String value) throws SQLException {
+		ps.setString(parameterIndex, value);
+	}
+
+	public int[] executeBatch() throws SQLException {
+		return ps.executeBatch();
+	}
+
+	public void addBatch() throws SQLException {
+		ps.addBatch();
+	}
+
+	public void createPreparedStatement(String sql) throws SQLException {
+		ps = connect.prepareStatement(sql);
+	}
+
+	public int close() {// 类似析构函数
+		try {
+			if (rs != null) {
+				rs.close();
+			}
+			if (ps != null) {
+				ps.close();
+			}
+			if (connect != null) {
+				connect.close();
+			}
+		} catch (SQLException e) {
+			return -10000;
+		}
+		return 10000;
+	}
 }

@@ -8,8 +8,8 @@
 </head>
 <body style="overflow-x:hidden;">
 	<h2>系统统计</h2>
-	<form action="/news/servlet/StatisticsServlet" id="myform"
-		method="post">
+	<form action="/news/servlet/StatisticsServlet?type=statistic"
+		id="myform" method="post">
 		<span> 查找 <select name="condition" id="condition">
 				<option value="all"
 					<c:if test="${requestScope.condition == 'all' }">selected="selected"</c:if>

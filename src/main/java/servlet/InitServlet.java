@@ -15,12 +15,16 @@ import org.apache.commons.configuration2.PropertiesConfiguration;
 import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Parameters;
 import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.apache.commons.mail.SimpleEmail;
+import org.quartz.SchedulerException;
 
+import Job.DatabaseRestore;
 import bean.Authority;
 import bean.NewsType;
 import service.AuthorityService;
 import service.NewsTypeService;
 import tools.AuthorityTool;
+import tools.EMailTool;
 import tools.FileTool;
 import tools.WebProperties;
 import dao.DatabaseDao;
@@ -33,6 +37,14 @@ public class InitServlet extends HttpServlet {
 		DatabaseDao.url = this.getServletContext().getInitParameter("url");
 		DatabaseDao.usr = this.getServletContext().getInitParameter("usr");
 		DatabaseDao.pwd = this.getServletContext().getInitParameter("pwd");
+
+		// 初始化email参数
+		EMailTool.simpleEmail = new SimpleEmail();
+		EMailTool.emailHost = this.getServletContext().getInitParameter("emailHost");
+		EMailTool.emailUserEmail = this.getServletContext().getInitParameter("emailUserEmail");
+		EMailTool.emailUserName = this.getServletContext().getInitParameter("emailUserName");
+		EMailTool.emailPassword = this.getServletContext().getInitParameter("emailPassword");
+		EMailTool.domain = this.getServletContext().getInitParameter("domain");
 
 		ServletContext servletContext = conf.getServletContext();
 		FileTool.root = servletContext.getRealPath("\\");
@@ -69,5 +81,18 @@ public class InitServlet extends HttpServlet {
 		} catch (ConfigurationException cex) {
 			cex.printStackTrace();
 		}
+
+		String d = this.getServletContext().getRealPath(WebProperties.config.getString("databaseBackupDir"));
+		WebProperties.config.setProperty("databaseBackupDir", d);
+
+		// 备份数据库任务
+		try {
+			DatabaseRestore.createScheduler();
+			DatabaseRestore.scheduleJob();
+			DatabaseRestore.start();
+		} catch (SchedulerException e) {
+			e.printStackTrace();
+		}
+
 	}
 }

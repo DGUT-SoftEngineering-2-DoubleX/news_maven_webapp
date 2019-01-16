@@ -14,8 +14,11 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
+import tools.EMailTool;
+import tools.Encryption;
 import tools.FileTool;
 import tools.PageInformation;
+import tools.Tool;
 import tools.WebProperties;
 import bean.User;
 import bean.Userinformation;
@@ -24,18 +27,60 @@ import dao.UserDao;
 import dao.UserinformationDao;
 
 public class UserService {
+	public Integer registerChecker(User user) {
+		try {
+			// DatabaseDao databaseDao = new DatabaseDao();
+			// UserDao UserDao = new UserDao();
+			// if (UserDao.hasUser(user, databaseDao)) {
+			// return 0;// 失败，用户已存在
+			// } else {// 没有同名用户，可以注册
+			// if (UserDao.register(user, databaseDao) > 0)
+			// return 1; // 成功
+			// else
+			// return -1;
+			// }
+
+			UserDao userDao = new UserDao();
+			DatabaseDao databaseDao = new DatabaseDao();
+			Integer result = 0;
+			// 有同名用户
+			if (userDao.hasStringValue("name", user.getName(), databaseDao) == 1) {
+				result = -1;
+			}
+			// email已被注册过
+			if (userDao.hasStringValue("email", user.getEmail(), databaseDao) == 1) {
+				result += -10;
+			}
+			// 有同名用户或email被注册过
+			if (result < 0)
+				return result;
+
+			// 根据密码生成盐和加密密码
+			Encryption.encryptPasswd(user);
+
+			return 1;
+			// if (userDao.register(user, databaseDao) == 1)
+			// return 1;// 成功创建用户
+			// else
+			// return 0;// 数据库操作失败
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return -1;// 数据库操作失败
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -2;// 其他异常
+		}
+	}
+
 	public Integer register(User user) {
 		try {
+			UserDao userDao = new UserDao();
 			DatabaseDao databaseDao = new DatabaseDao();
-			UserDao UserDao = new UserDao();
-			if (UserDao.hasUser(user, databaseDao)) {
-				return 0;// 失败，用户已存在
-			} else {// 没有同名用户，可以注册
-				if (UserDao.register(user, databaseDao) > 0)
-					return 1; // 成功
-				else
-					return -1;
-			}
+			if (userDao.register(user, databaseDao) == 1)
+				return 1;// 成功创建用户
+			else
+				return 0;// 数据库操作失败
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return -1;// 数据库操作失败
@@ -127,26 +172,27 @@ public class UserService {
 	}
 
 	// 修改密码
-	public Integer changePassword(User user, String newPassword) {
-		try {
-			DatabaseDao databaseDao = new DatabaseDao();
-			UserDao userDao = new UserDao();
-			if (userDao.hasUser(user, databaseDao)) {
-				if (databaseDao.updateAStringFieldByIdAndOldPassword("user", user.getUserId(), "password", newPassword,
-						"password", user.getPassword()) > 0)
-					return 1;// 修改成功
-				else
-					return 0;// 用户存在，但修改失败，可能是密码问题
-			} else
-				return -1;// 用户不存在
-		} catch (SQLException e) {
-			e.printStackTrace();
-			return -2;// 数据库问题
-		} catch (Exception e) {
-			e.printStackTrace();
-			return -3;// 其它异常
-		}
-	}
+	// public Integer changePassword(User user, String newPassword) {
+	// try {
+	// DatabaseDao databaseDao = new DatabaseDao();
+	// UserDao userDao = new UserDao();
+	// if (userDao.hasUser(user, databaseDao)) {
+	// if (databaseDao.updateAStringFieldByIdAndOldPassword("user",
+	// user.getUserId(), "password", newPassword,
+	// "password", user.getPassword()) > 0)
+	// return 1;// 修改成功
+	// else
+	// return 0;// 用户存在，但修改失败，可能是密码问题
+	// } else
+	// return -1;// 用户不存在
+	// } catch (SQLException e) {
+	// e.printStackTrace();
+	// return -2;// 数据库问题
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// return -3;// 其它异常
+	// }
+	// }
 
 	public Userinformation getByUserId(Integer userId) {
 		Userinformation userinformation = null;
@@ -273,4 +319,130 @@ public class UserService {
 		}
 		return result;
 	}
+
+	public Integer findPasswordByEmail(User user, Integer rand) {// 返回值：1成功发送邮件，-1发送邮件失败，-2邮箱未注册过
+		try {
+			UserDao userDao = new UserDao();
+			DatabaseDao databaseDao = new DatabaseDao();
+			Integer result = 0;
+			if (userDao.hasStringValue("email", user.getEmail(), databaseDao) == 1)// 该email存在
+				result = EMailTool.sendReturnPassword(user.getEmail(), rand);// 发送邮件
+			else// 该email不存在
+				result = -2;
+			return result;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return -3; // 出现其他错误
+		}
+	}
+
+	public Integer updatePassword(User user) {// 返回值：1成功发送邮件，-1发送邮件失败，-2邮箱未注册过
+		try {
+			UserDao userDao = new UserDao();
+			DatabaseDao databaseDao = new DatabaseDao();
+			Integer result;
+			// 根据密码生成盐和加密密码
+			Encryption.encryptPasswd(user);
+			if (userDao.updatePassword(user, databaseDao))// 修改密码成功
+				result = 1;
+			else// 修改密码失败！
+				result = -1;
+			return result;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return -2;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return -3;
+		}
+	}
+
+	public Integer changePassword(User user, String newPassword) {
+		try {
+			UserDao userDao = new UserDao();
+			DatabaseDao databaseDao = new DatabaseDao();
+			if (userDao.checkOldPassword(user, databaseDao)) {
+				user.setPassword(newPassword);
+				// 根据密码生成盐和加密密码
+				Encryption.encryptPasswd(user);
+				if (userDao.updatePassword(user, databaseDao))
+					return 1;
+				else
+					return -1;
+			} else {
+				return 0;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return -2;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return -3;
+		}
+	}
+
+	public Integer qqLogin(User user) {
+		try {
+			DatabaseDao databaseDao = new DatabaseDao();
+			UserDao userDao = new UserDao();
+			if (databaseDao.hasStringValue("user", "openId", user.getOpenId())) {// 该Openid存在
+				// 说明此openId登录已与本地user表中的用户绑定，可以登录
+				userDao.getUserByOpenId(user);
+				return 1;// 可以登录
+			}
+			return -1;// 不可以登录，必须手动绑定
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -1;// 不可以登录，数据库访问错误
+		}
+	}
+
+	// 系统自动创建一个用户（用户名和密码随机，无电子邮箱），今后允许用户在登录状态下修改一次用户名，修改一次邮箱，并验证，然后再不允许用户修改用户名和电子邮箱
+	public Integer qqBindNewUser(User user) {
+		try {
+			DatabaseDao databaseDao = new DatabaseDao();
+			UserDao userDao = new UserDao();
+
+			Integer maxId = databaseDao.getMaxId("user");
+			maxId++;
+			user.setName(user.getName() + maxId.toString());// 新用户名为：qq昵称+（用户表最大id值+1）
+			user.setPassword(Tool.getRandomPassword());// 设置一个随机密码，可以把该密码告诉用户，让他登录系统后去修改密码或找回密码
+			user.setType("user");//
+			user.setEnable("use");
+			// 根据密码生成盐和加密密码
+			Encryption.encryptPasswd(user);
+
+			if (userDao.register(user, databaseDao) > 0) {
+				userDao.hasUser(user, databaseDao);// 查询同名用户的信息
+				user.setPassword(null);
+				user.setSalt(null);
+				return 1; // 绑定用户成功
+			} else
+				return -1;// 绑定用户失败
+		} catch (Exception e) {
+			e.printStackTrace();
+			return -2;// 绑定用户失败
+		}
+	}
+
+	// 手动绑定已有用户（需要输入用户名，且要用本系统的密码验证）
+	public Integer qqBindOldUser(User user) {
+		Integer result = 0;
+		try {
+			DatabaseDao databaseDao = new DatabaseDao();
+			UserDao userDao = new UserDao();
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
 }

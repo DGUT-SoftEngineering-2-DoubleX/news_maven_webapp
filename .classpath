@@ -29,5 +29,16 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="src/main/webapp/plugin/ueditor1_4_3_3-utf8-jsp/jsp/lib/commons-codec-1.9.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/plugin/ueditor1_4_3_3-utf8-jsp/jsp/lib/commons-fileupload-1.3.1.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/plugin/ueditor1_4_3_3-utf8-jsp/jsp/lib/commons-io-2.4.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/plugin/ueditor1_4_3_3-utf8-jsp/jsp/lib/json.jar"/>
+	<classpathentry kind="lib" path="src/main/webapp/plugin/ueditor1_4_3_3-utf8-jsp/jsp/lib/ueditor-1.1.2.jar"/>
+	<classpathentry kind="lib" path="E:/MyEclipseWorkspace/quartz-2.2.3/lib/c3p0-0.9.1.1.jar"/>
+	<classpathentry kind="lib" path="E:/MyEclipseWorkspace/quartz-2.2.3/lib/log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="E:/MyEclipseWorkspace/quartz-2.2.3/lib/quartz-2.2.3.jar"/>
+	<classpathentry kind="lib" path="E:/MyEclipseWorkspace/quartz-2.2.3/lib/quartz-jobs-2.2.3.jar"/>
+	<classpathentry kind="lib" path="E:/MyEclipseWorkspace/quartz-2.2.3/lib/slf4j-api-1.7.7.jar"/>
+	<classpathentry kind="lib" path="E:/MyEclipseWorkspace/quartz-2.2.3/lib/slf4j-log4j12-1.7.7.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -20,6 +20,28 @@
 		<param-name>pwd</param-name>
 		<param-value>123456</param-value>
 	</context-param>
+
+	<context-param>
+		<param-name>domain</param-name>
+		<param-value>localhost:8080/news</param-value>
+	</context-param>
+	<context-param>
+		<param-name>emailHost</param-name>
+		<param-value>smtp.163.com</param-value>
+	</context-param>
+	<context-param>
+		<param-name>emailUserEmail</param-name>
+		<param-value>18813543542@163.com</param-value>
+	</context-param>
+	<context-param>
+		<param-name>emailUserName</param-name>
+		<param-value>18813543542</param-value>
+	</context-param>
+	<context-param>
+		<param-name>emailPassword</param-name>
+		<param-value>dgut123</param-value>
+	</context-param>
+
 	<servlet>
 		<description>用户管理</description>
 		<servlet-name>UserServlet</servlet-name>
@@ -46,6 +68,22 @@
 		<servlet-name>StatisticsServlet</servlet-name>
 		<servlet-class>servlet.StatisticsServlet</servlet-class>
 	</servlet>
+	<servlet>
+		<description>验证码</description>
+		<servlet-name>ImageCheckCodeServlet</servlet-name>
+		<servlet-class>servlet.ImageCheckCodeServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<description>生成静态HTML</description>
+		<servlet-name>AutoGeneratorServlet</servlet-name>
+		<servlet-class>servlet.AutoGeneratorServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<description>备份数据库</description>
+		<servlet-name>DatabaseServlet</servlet-name>
+		<servlet-class>servlet.DatabaseServlet</servlet-class>
+	</servlet>
+
 	<servlet-mapping>
 		<servlet-name>UserServlet</servlet-name>
 		<url-pattern>/servlet/UserServlet</url-pattern>
@@ -66,6 +104,19 @@
 		<servlet-name>StatisticsServlet</servlet-name>
 		<url-pattern>/servlet/StatisticsServlet</url-pattern>
 	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ImageCheckCodeServlet</servlet-name>
+		<url-pattern>/servlet/ImageCheckCodeServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>AutoGeneratorServlet</servlet-name>
+		<url-pattern>/servlet/AutoGeneratorServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>DatabaseServlet</servlet-name>
+		<url-pattern>/servlet/DatabaseServlet</url-pattern>
+	</servlet-mapping>
+
 	<filter>
 		<filter-name>charencode</filter-name>
 		<filter-class>filter.CharEncodingFilter</filter-class>
@@ -86,6 +137,7 @@
 		<url-pattern>/user/manageUIMain/*</url-pattern>
 		<url-pattern>/user/free/*</url-pattern>
 		<url-pattern>/index.jsp</url-pattern>
+		<url-pattern>/newsHtml/*</url-pattern>
 		<dispatcher>FORWARD</dispatcher>
 		<dispatcher>REQUEST</dispatcher>
 	</filter-mapping>
@@ -101,6 +153,8 @@
 		<servlet-name>UserServlet</servlet-name>
 		<servlet-name>NewsServlet</servlet-name>
 		<servlet-name>CommentServlet</servlet-name>
+		<servlet-name>StatisticsServlet</servlet-name>
+		<servlet-name>AutoGeneratorServlet</servlet-name>
 		<dispatcher>FORWARD</dispatcher>
 		<dispatcher>REQUEST</dispatcher>
 	</filter-mapping>

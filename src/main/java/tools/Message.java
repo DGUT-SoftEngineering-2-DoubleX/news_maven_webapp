@@ -1,7 +1,7 @@
 package tools;
 
 public class Message {
-	private Integer result;
+	private Integer result;// 保存结果
 	private String message;// 显示的提示信息
 	private String redirectUrl;// 跳转的网址
 	private Integer redirectTime;// 跳转的间隔时间，单位秒

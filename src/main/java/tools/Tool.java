@@ -1,12 +1,20 @@
 package tools;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class Tool {
 	static public Map<String, String> pathMap = new Hashtable<String, String>();
+	static public boolean isMaintain = false; // 网站是否处于维护状态
 
 	// 从客户端获取分页、排序、删除等的参数
 	public static void getPageInformation(String tableName, HttpServletRequest request,
@@ -131,4 +139,60 @@ public class Tool {
 		return resultString;
 	}
 
+	static public Integer getRandomInRangeInteger(Integer min, Integer max) {
+		int rand = min + (int) (Math.random() * ((max - min) + 1));
+		return rand;
+	}
+
+	static public Long getSecondFromNow(Date old) {// 当前时间领先old多少秒
+		Date now = new Date();
+		long between = (now.getTime() - old.getTime()) / 1000;// 得到间隔秒数
+		return between;
+	}
+
+	// 给ajax请求返回json格式的数据
+	static public void returnJsonString(HttpServletResponse response, String jsonString)
+			throws ServletException, IOException {
+		response.setHeader("Content-type", "text/html;charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		out.write(jsonString);
+		out.flush();
+	}
+
+	// 生成符合条件的随机字符串
+	static public String getRandomString(Integer length, String firstChar, String remainString) {
+		String result = "";
+		int a = getRandomInRangeInteger(0, firstChar.length() - 1);
+		result += firstChar.substring(a, a + 1);
+
+		length--;
+		for (int i = 0; i < length; i++) {
+			a = getRandomInRangeInteger(0, remainString.length() - 1);
+			result += remainString.substring(a, a + 1);
+		}
+
+		return result;
+	}
+
+	// 至少需要8个字符，以字母开头，以字母或数字结尾，可以有-和_
+	static public String getRandomPassword() {
+		Integer length = 8;
+		String firstChar = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		String remainString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_";
+
+		return getRandomString(length, firstChar, remainString);
+	}
+
+	static public List<Integer> getListWithLengthInitIntValue(Integer length, Integer value) {
+		List<Integer> myList = new ArrayList<Integer>();
+		for (int i = 0; i < length; i++)
+			myList.add(value);
+
+		return myList;
+	}
+
+	// 保留两位小数，四舍五入的一个老土的方法
+	public static Double formatDouble(Double d) {
+		return new Double(Math.round(d * 100) * 1.0 / 100);
+	}
 }

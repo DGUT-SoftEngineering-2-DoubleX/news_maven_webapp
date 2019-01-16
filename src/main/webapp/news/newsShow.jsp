@@ -5,7 +5,9 @@
 <html>
 <head>
 <meta charset="utf-8">
+<script type="text/javascript" src="/news/js/jquery/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
+	/*
 	function getOnePage(type, orderFieldName) {
 		var url1;
 		var page = document.getElementById("page");
@@ -39,6 +41,41 @@
 		}
 		//提交
 		document.getElementById('myform').submit();
+	}
+	*/
+	function getOnePage(type, orderFieldName) {
+		var url1;
+		var page = $("#page");
+		var pageSize = $("#pageSize");
+		var totalPageCount = $("#totalPageCount");
+
+		var order = $("#order");
+		var orderField = $("#orderField");
+
+		if (orderFieldName != "") { //切换排序
+			orderField.val(orderFieldName);
+			if (order.val() == "asc") //切换排序
+				order.val("desc");
+			else
+				order.val("asc");
+
+			page.val("1"); //排序后从第一页开始显示												
+		}
+
+		pageValue = parseInt(page.val());
+		if (type == "first")
+			page.val("1");
+		else if (type == "pre") {
+			pageValue -= 1;
+			page.val(pageValue.toString());
+		} else if (type == "next") {
+			pageValue += 1;
+			page.val(pageValue.toString());
+		} else if (type == "last") {
+			page.val(totalPageCount.val());
+		}
+		//提交
+		$("#myform").submit();
 	}
 </script>
 </head>

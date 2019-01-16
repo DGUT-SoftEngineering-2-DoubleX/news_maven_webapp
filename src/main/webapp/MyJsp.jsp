@@ -5,6 +5,7 @@
 <link href="/news/css/newsCSS.css" rel="stylesheet" type="text/css">
 <meta charset="utf-8">
 <script type="text/javascript">
+
 	function getOnePage(type) {
 		var url1;
 		var page = document.getElementById("page");

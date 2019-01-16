@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import tools.Encryption;
 import tools.PageInformation;
 import tools.Tool;
 import tools.WebProperties;
@@ -22,28 +23,42 @@ public class UserDao {
 	public Integer register(User user, DatabaseDao databaseDao) throws SQLException {
 		user.setHeadIconUrl("\\" + WebProperties.config.getString("projectName")
 				+ WebProperties.config.getString("headIconFileDefault"));// 默认头像
-		String sql = "insert into user(type,name,password,enable,headIconUrl) values('" + user.getType() + "','"
-				+ user.getName() + "','" + user.getPassword() + "','" + user.getEnable() + "','"
-				+ user.getHeadIconUrl().replace("\\", "/") + "')";
+		String sql = "insert into user(type,name,password,enable,headIconUrl,addedSaltPassword,salt,email,openId,accessToken) values('"
+				+ user.getType() + "','" + user.getName() + "','" + user.getPassword() + "','" + user.getEnable()
+				+ "','" + user.getHeadIconUrl().replace("\\", "/") + "','" + user.getAddedSaltPassword() + "','"
+				+ user.getSalt() + "','" + user.getEmail() + "','" + user.getOpenId() + "','" + user.getAccessToken()
+				+ "')";
 		return databaseDao.update(sql);
 	}
 
 	public Integer login(User user) throws SQLException, Exception {
 		DatabaseDao databaseDao = new DatabaseDao();
-		String sql = "select * from user where name='" + user.getName() + "' and password='" + user.getPassword() + "'";
+		String sql = "select * from user where name='" + user.getName() + "'";
+
 		databaseDao.query(sql);
+
 		while (databaseDao.next()) {
-			String enable = databaseDao.getString("enable");
-			if (("use").equals(enable)) {
-				user.setType(databaseDao.getString("type"));
-				user.setUserId(databaseDao.getInt("userId"));
-				user.setHeadIconUrl(databaseDao.getString("headIconUrl"));
-				user.setRegisterDate(databaseDao.getTimestamp("registerDate"));
-				return 1;// 可以登录
+			user.setSalt(databaseDao.getString("salt"));
+			String addedSaltPassword = databaseDao.getString("addedSaltPassword");
+			boolean checked = Encryption.checkPassword(user, addedSaltPassword);
+			if (checked) {
+				String enable = databaseDao.getString("enable");
+				if (("use").equals(enable)) {
+					user.setType(databaseDao.getString("type"));
+					user.setUserId(databaseDao.getInt("userId"));
+					user.setHeadIconUrl(databaseDao.getString("headIconUrl"));
+					user.setRegisterDate(databaseDao.getTimestamp("registerDate"));
+					user.setAddedSaltPassword(addedSaltPassword);
+					user.setSalt(databaseDao.getString("salt"));
+					user.setEmail(databaseDao.getString("email"));
+					return 1;// 可以登录
+				} else
+					return 0;// 用户存在，但被停用
+			} else {
+				return -1; // 密码错误
 			}
-			return 0;// 用户存在，但被停用
 		}
-		return -1;// 该用户不存在或密码错误
+		return -2;// 该用户不存在
 	}
 
 	public List<User> getOnePage(PageInformation pageInformation, DatabaseDao databaseDao) throws SQLException {
@@ -115,4 +130,53 @@ public class UserDao {
 		return databaseDao.update(sql.replace("\\", "/"));
 
 	}
+
+	// 根据字段名，查是否有字段值为value的记录
+	public int hasStringValue(String fieldName, String value, DatabaseDao databaseDao) throws SQLException {// 返回值：1表示有相同值、-1表示没有相同值
+		databaseDao.query("select * from user where " + fieldName + "='" + value + "'");
+		while (databaseDao.next()) {
+			return 1;
+		}
+		return -1;
+	}
+
+	public boolean updatePassword(User user, DatabaseDao databaseDao) throws SQLException {
+		String sql = "update user set password='" + user.getPassword() + "'," + "salt='" + user.getSalt()
+				+ "',addedSaltPassword='" + user.getAddedSaltPassword() + "'" + " where email='" + user.getEmail()
+				+ "'";
+		boolean returnValue = false;
+		if (databaseDao.update(sql) > 0)
+			returnValue = true;// 成功更新密码和盐
+		return returnValue;
+	}
+
+	public boolean checkOldPassword(User user, DatabaseDao databaseDao) throws SQLException {
+		String sql = "select addedSaltPassword from user where name='" + user.getName() + "'";
+		databaseDao.query(sql);
+		String addedSaltPassword;
+		while (databaseDao.next()) {
+			addedSaltPassword = databaseDao.getString("addedSaltPassword");
+			if (Encryption.checkPassword(user, addedSaltPassword))
+				return true;
+		}
+		return false;
+	}
+
+	public void getUserByOpenId(User user) throws SQLException, Exception {// 根据用户名获取用户信息
+		DatabaseDao databaseDao = new DatabaseDao();
+		databaseDao.query("select * from user where openId='" + user.getOpenId() + "'");
+		while (databaseDao.next()) {
+			user.setEnable(databaseDao.getString("enable"));
+			user.setPassword(databaseDao.getString("password"));
+			user.setAddedSaltPassword(databaseDao.getString("addedSaltPassword"));
+			user.setSalt(databaseDao.getString("salt"));
+			user.setType(databaseDao.getString("type"));
+			user.setName(databaseDao.getString("name"));
+			user.setAccessToken(databaseDao.getString("accessToken"));
+			user.setUserId(databaseDao.getInt("userId"));
+			user.setRegisterDate(databaseDao.getTimestamp("registerDate"));
+			user.setHeadIconUrl(databaseDao.getString("headIconUrl"));
+		}
+	}
+
 }
